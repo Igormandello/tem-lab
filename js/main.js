@@ -73,10 +73,10 @@ function setup() {
 
 function lab() {
 	let now = new Date(Date.now());
-	now.setHours(8);
-	now.setMinutes(30);
+	now.setHours(10);
+	now.setMinutes(15);
 
-	let weekday = weekdays[now.getDay()],
+	let weekday = weekdays[now.getDay() - 1],
 			hours = now.getHours(),
 			minutes = now.getMinutes();
 
@@ -89,7 +89,10 @@ function lab() {
 		}
 	}
 
-	console.log(schedule[weekday].dinalva[classIndex]);
+	if (classTimes[classIndex].interval)
+		console.log('Interval');
+	else
+		console.log(schedule[weekday].dinalva[classIndex]);
 }
 
 setup();
