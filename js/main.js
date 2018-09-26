@@ -16,28 +16,49 @@ window.onload = () => {
     let classes = lab(now);
     console.log(classes);
 
-    let beforeP = document.querySelector('p:nth-child(1)');
-    if (classes.lastClasses === null)
-      beforeP.innerText = 'Claro que não';
-    else if (classes.lastClasses.some(obj => obj === '-' || obj.includes('Aula Reforço')))
-      beforeP.innerText = 'Tem';
-    else
-      beforeP.innerText = 'Não tem';
+    let beforeP = document.querySelector('p.last');
+    setText(beforeP, classes.lastClasses);
 
-    let mainP = document.querySelector('p:nth-child(2)');
-    if (classes.actualClasses === null)
-      mainP.innerText = 'Claro que não';
-    else if (classes.actualClasses.some(obj => obj === '-' || obj.includes('Aula Reforço')))
-      mainP.innerText = 'Tem';
-    else
-      mainP.innerText = 'Não tem';
+    let mainP = document.querySelector('p.actual');
+    setText(mainP, classes.actualClasses);
 
-    let afterP = document.querySelector('p:nth-child(3)');
-    if (classes.nextClasses === null)
-      afterP.innerText = 'Claro que não';
-    else if (classes.nextClasses.some(obj => obj === '-' || obj.includes('Aula Reforço')))
-      afterP.innerText = 'Tem';
-    else
-      afterP.innerText = 'Não tem';
+    let afterP = document.querySelector('p.next');
+    setText(afterP, classes.nextClasses);
+
+    let timeRemaining = checkNext(now);
+    console.log(timeRemaining / 60000);
+    setTimeout(classesCycle, timeRemaining);
   });
+}
+
+function classesCycle() {
+  console.log('To Do');
+}
+
+function setText(element, classes) {
+  if (classes === null)
+    element.innerText = 'Claro que não';
+  else if (classes.some(obj => obj === '-' || obj.includes('Aula Reforço')))
+    element.innerText = 'Tem';
+  else
+    element.innerText = 'Não tem';
+}
+
+function checkNext(now) {
+  let h = now.getHours(),
+      m = now.getMinutes();
+
+  let t = 0;
+  for (let i = 0; i < classTimes.length - 1; i++) {
+    let actualClass = classTimes[i];
+
+    if (actualClass.h > h || (actualClass.h == h && actualClass.m > m)) {
+      t = (actualClass.h - h) * 60 + actualClass.m - m;
+      t *= 60;
+      t *= 1000;
+      break;
+    }
+  }
+
+  return t;
 }

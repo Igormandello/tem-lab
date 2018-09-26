@@ -17,13 +17,8 @@ section {
 
   p {
     position: absolute;
-    text-align: center;
-    font-size: 8rem;
-    line-height: 8rem;
     color: white;
     align-self: center;
-    filter: none;
-    transform: translateY(calc(50vh - 4rem));
     transition: transform 1s, font-size 1s, color 1s, filter 1s;
 
     &.last, &.next {
@@ -53,6 +48,13 @@ section {
     
     &.after-next {
       transform: translateY(calc(100vh + 5rem));
+    }
+
+    &.actual {
+      font-size: 8rem;
+      line-height: 8rem;
+      filter: none;
+      transform: translateY(calc(50vh - 4rem));
     }
   }
 }
