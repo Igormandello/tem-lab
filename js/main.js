@@ -1,3 +1,4 @@
+const gistURL = 'https://gist.githubusercontent.com/Igormandello/a8d8d01fb9997c1120a18a2b1bdf20ad/raw/3439ce0ae2c27282182fcf15268d1266834d420d/Schedule';
 const classTimes = [
 	{ h: 7, m: 30 },
 	{ h: 8, m: 20 },
@@ -44,7 +45,7 @@ const labNames = [
 var schedule;
 function load(callback) {
 	let request = new XMLHttpRequest();
-	request.open('GET', 'js/schedule.txt');
+	request.open('GET', gistURL);
 	request.send(null);
 
 	request.onreadystatechange = function() {
@@ -112,8 +113,11 @@ function lab() {
 
 	if (i < 0 || i > classTimes.length)
 		console.log('what are you doing in the school?');
-	else
-		console.log(schedule[weekday].dinalva[i]);
+	else {
+    console.log(schedule[weekday].dinalva[i]);
+    console.log(schedule[weekday].claudio[i]);
+    console.log(schedule[weekday].lapa[i]);
+  }
 }
 
 load(setup);
