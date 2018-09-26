@@ -1,0 +1,24 @@
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'Nunito', sans-serif;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: space-around;
+  background-color: #3f3f3f;
+
+  p {
+    text-align: center;
+    font-size: 5rem;
+    color: white;
+    align-self: center;
+  }
+}
