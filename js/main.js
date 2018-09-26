@@ -44,7 +44,7 @@ const labNames = [
 var schedule;
 function load(callback) {
 	let request = new XMLHttpRequest();
-	request.open('GET', '/js/schedule.txt');
+	request.open('GET', 'js/schedule.txt');
 	request.send(null);
 
 	request.onreadystatechange = function() {
