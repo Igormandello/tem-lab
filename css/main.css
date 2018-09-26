@@ -1,54 +1,43 @@
 *, *::before, *::after {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
+  box-sizing: border-box; }
 
 html {
-  font-family: "Nunito", sans-serif;
-  overflow-y: hidden;
-}
+  font-family: 'Nunito', sans-serif;
+  overflow-y: hidden; }
 
 section {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #3f3f3f;
-}
-section p {
-  position: absolute;
-  color: white;
-  align-self: center;
-  transition: transform 1s, font-size 1s, color 1s, filter 1s;
-}
-section p.last, section p.next {
-  font-size: 5rem;
-  line-height: 5rem;
-  filter: brightness(0.8) blur(2px);
-}
-section p.last {
-  transform: translateY(50px);
-}
-section p.next {
-  transform: translateY(calc(100vh - 5rem - 50px));
-}
-section p.before-last, section p.after-next {
-  transform: translateY(-5rem);
-  font-size: 2.5rem;
-  line-height: 2.5rem;
-  filter: brightness(0.8) blur(20px);
-}
-section p.before-last {
-  transform: translateY(-5rem);
-}
-section p.after-next {
-  transform: translateY(calc(100vh + 5rem));
-}
-section p.actual {
-  font-size: 8rem;
-  line-height: 8rem;
-  filter: none;
-  transform: translateY(calc(50vh - 4rem));
-}
+  background-color: #3f3f3f; }
+  section p {
+    position: absolute;
+    color: white;
+    align-self: center;
+    transition: transform 1s, font-size 1s, color 1s, filter 1s; }
+    section p.last, section p.next {
+      font-size: 5rem;
+      line-height: 5rem;
+      filter: brightness(0.8) blur(2px); }
+    section p.last {
+      transform: translateY(50px); }
+    section p.next {
+      transform: translateY(calc(100vh - 5rem - 50px)); }
+    section p.before-last, section p.after-next {
+      transform: translateY(-5rem);
+      font-size: 2.5rem;
+      line-height: 2.5rem;
+      filter: brightness(0.8) blur(20px); }
+    section p.before-last {
+      transform: translateY(-5rem); }
+    section p.after-next {
+      transform: translateY(calc(100vh + 5rem)); }
+    section p.current {
+      font-size: 8rem;
+      line-height: 8rem;
+      filter: none;
+      transform: translateY(calc(50vh - 4rem)); }
 
 /*# sourceMappingURL=main.css.map */

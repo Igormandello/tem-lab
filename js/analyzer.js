@@ -54,24 +54,23 @@ function setup(data, callback) {
 
 	schedule = {};
 	for (let i = 0; i < weekdays.length; i++) {
-		let actualWeekday = {};
+		let weekday = {};
 		for (let n = 0; n < labNames.length; n++) {
-			//actualWeekday[labNames[n]] = [];
-			let actualLab = [];
+			let lab = [];
 
 			let timeIndex = 0;
 			for (let j = 0; j < classTimes.length; j++)
 				if (!classTimes[j].interval) {
 					//+1 to skip the separator between each day
-					let actualClass = classes[(i * 3 + n) * (classTimes.length - intervalQtty + 1) + timeIndex];
+					let currentClass = classes[(i * 3 + n) * (classTimes.length - intervalQtty + 1) + timeIndex];
 
-					actualLab.push(actualClass); 
+					lab.push(currentClass); 
 					timeIndex++;
 				} else
-					actualLab.push('Interval'); 
+				lab.push('Interval'); 
 
-			actualWeekday[labNames[n]] = actualLab;
-			schedule[weekdays[i]] = actualWeekday;
+			weekday[labNames[n]] = lab;
+			schedule[weekdays[i]] = weekday;
 		}
 	}
 
@@ -106,16 +105,16 @@ function lab(time) {
 
     return {
       lastClasses: lastClass,
-      actualClasses: null,
+      currentClasses: null,
       nextClasses: nextClasses
     }
   }
 
 	let i = 0;
 	for (; i < classTimes.length - 1; i++) {
-		let actualClass = classTimes[i];
+		let classTime = classTimes[i];
 
-		if (actualClass.h > hours || (actualClass.h == hours && actualClass.m > minutes)) {
+		if (classTime.h > hours || (classTime.h == hours && classTime.m > minutes)) {
 			i--; //The next class is i, so the actual class is i - 1 
 			break;
 		}
@@ -138,7 +137,7 @@ function lab(time) {
 
 		return {
       lastClasses: lastClasses,
-      actualClasses: null,
+      currentClasses: null,
       nextClasses: [
         schedule[weekday].dinalva[0],
         schedule[weekday].claudio[0],
@@ -164,7 +163,7 @@ function lab(time) {
 
 		return {
       lastClasses: lastClasses,
-      actualClasses: [
+      currentClasses: [
         schedule[weekday].dinalva[i],
         schedule[weekday].claudio[i],
         schedule[weekday].lapa[i]

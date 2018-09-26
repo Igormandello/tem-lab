@@ -18,8 +18,8 @@ window.onload = () => {
     let beforeP = document.querySelector('p.last');
     setText(beforeP, classes.lastClasses);
   
-    let mainP = document.querySelector('p.actual');
-    setText(mainP, classes.actualClasses);
+    let mainP = document.querySelector('p.current');
+    setText(mainP, classes.currentClasses);
   
     let afterP = document.querySelector('p.next');
     setText(afterP, classes.nextClasses);
@@ -38,8 +38,8 @@ function classesCycle() {
 
   document.querySelector('p.before-last').remove();
   document.querySelector('.last').classList = 'before-last';
-  document.querySelector('.actual').classList = 'last';
-  document.querySelector('.next').classList = 'actual';
+  document.querySelector('.current').classList = 'last';
+  document.querySelector('.next').classList = 'current';
 
   let afterNext = document.querySelector('.after-next');
   setText(afterNext, classes.nextClasses);
@@ -67,10 +67,10 @@ function checkNext(now) {
 
   let t = 0;
   for (let i = 0; i < classTimes.length - 1; i++) {
-    let actualClass = classTimes[i];
+    let classTime = classTimes[i];
 
-    if (actualClass.h > h || (actualClass.h == h && actualClass.m > m)) {
-      t = (actualClass.h - h) * 60 + actualClass.m - m;
+    if (classTime.h > h || (classTime.h == h && classTime.m > m)) {
+      t = (classTime.h - h) * 60 + classTime.m - m;
       t *= 60;
       t *= 1000;
       break;
