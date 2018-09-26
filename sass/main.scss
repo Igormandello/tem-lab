@@ -17,8 +17,13 @@ section {
 
   p {
     text-align: center;
-    font-size: 5rem;
+    font-size: 8rem;
     color: white;
     align-self: center;
+
+    &:first-child, &:last-child {
+      font-size: 5rem;
+      filter: brightness(0.8) blur(2px);
+    }
   }
 }
