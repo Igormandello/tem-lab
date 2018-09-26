@@ -15,8 +15,6 @@ const classTimes = [
 	{ h: 17, m: 25 },
 ]
 
-const duration = 50;
-
 const weekdays = [
 	'monday',
 	'tuesday',
@@ -46,6 +44,12 @@ function load(callback) {
 function setup(data) {
 	let classes = data.split('\n');
 
+	let intervalQtty = 0;
+	classTimes.forEach(obj => {
+		if (obj.interval)
+			intervalQtty++;
+	});
+
 	schedule = {};
 	for (let i = 0; i < weekdays.length; i++) {
 		let actualWeekday = {};
@@ -56,9 +60,13 @@ function setup(data) {
 		let timeIndex = 0;
 		for (let n = 0; n < classTimes.length; n++)
 			if (!classTimes[n].interval) {
+				//+1 to skip the separator between each day
+				let actualClass = classes[i * (classTimes.length - intervalQtty + 1) + timeIndex];
+
+				schedule[weekdays[i]].dinalva.push(actualClass); 
 				timeIndex++;
-				schedule[weekdays[i]].dinalva.push(classes[i * (classTimes.length + 1) + timeIndex]); //6 to skip the separator between each day
-			}
+			} else
+				schedule[weekdays[i]].dinalva.push('Interval'); 
 	}
 
 	console.log(schedule);
@@ -67,26 +75,27 @@ function setup(data) {
 
 function lab() {
 	let now = new Date(Date.now());
-	now.setHours(10);
-	now.setMinutes(15);
+	now.setHours(20);
+	now.setMinutes(29);
 
-	let weekday = weekdays[now.getDay() - 1],
+	let weekday = weekdays[4],
 			hours = now.getHours(),
 			minutes = now.getMinutes();
 
-	let classIndex = 0;
-	for (let i = 1; i < classTimes.length; i++) {
+	let i = 0;
+	for (; i < classTimes.length - 1; i++) {
 		let actualClass = classTimes[i];
+
 		if (actualClass.h > hours || (actualClass.h == hours && actualClass.m > minutes)) {
-			classIndex = i - 1;
+			i--; //The next class is i, so the actual class is i - 1 
 			break;
 		}
 	}
 
-	if (classTimes[classIndex].interval)
-		console.log('Interval');
+	if (i < 0 || i > classTimes.length)
+		console.log('what are you doing in the school?');
 	else
-		console.log(schedule[weekday].dinalva[classIndex]);
+		console.log(schedule[weekday].dinalva[i]);
 }
 
 load(setup);
