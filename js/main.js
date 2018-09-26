@@ -13,7 +13,19 @@ const classTimes = [
 	{ h: 15, m: 45, interval: true },
 	{ h: 16, m: 35 },
 	{ h: 17, m: 25 },
-]
+	{ h: 18, m: 15, interval: true },
+	{ h: 19, m: 00 },
+	{ h: 19, m: 40 },
+	{ h: 20, m: 20 },
+	{ h: 21, m: 00, interval: true },
+	{ h: 21, m: 10 },
+	{ h: 21, m: 50 },
+];
+
+const closeTime = {
+	h: 22,
+	m : 30
+};
 
 const weekdays = [
 	'monday',
@@ -53,34 +65,40 @@ function setup(data) {
 	schedule = {};
 	for (let i = 0; i < weekdays.length; i++) {
 		let actualWeekday = {};
-		for (let n = 0; n < labNames.length; n++)
-			actualWeekday[labNames[n]] = [];
+		for (let n = 0; n < labNames.length; n++) {
+			//actualWeekday[labNames[n]] = [];
+			let actualLab = [];
 
-		schedule[weekdays[i]] = actualWeekday;
-		let timeIndex = 0;
-		for (let n = 0; n < classTimes.length; n++)
-			if (!classTimes[n].interval) {
-				//+1 to skip the separator between each day
-				let actualClass = classes[i * (classTimes.length - intervalQtty + 1) + timeIndex];
+			let timeIndex = 0;
+			for (let j = 0; j < classTimes.length; j++)
+				if (!classTimes[j].interval) {
+					//+1 to skip the separator between each day
+					let actualClass = classes[(i * 3 + n) * (classTimes.length - intervalQtty + 1) + timeIndex];
 
-				schedule[weekdays[i]].dinalva.push(actualClass); 
-				timeIndex++;
-			} else
-				schedule[weekdays[i]].dinalva.push('Interval'); 
+					actualLab.push(actualClass); 
+					timeIndex++;
+				} else
+					actualLab.push('Interval'); 
+
+			actualWeekday[labNames[n]] = actualLab;
+			schedule[weekdays[i]] = actualWeekday;
+		}
 	}
 
-	console.log(schedule);
 	lab();
 }
 
 function lab() {
 	let now = new Date(Date.now());
-	now.setHours(20);
-	now.setMinutes(29);
 
-	let weekday = weekdays[4],
+	let weekday = weekdays[now.getDay() - 1],
 			hours = now.getHours(),
 			minutes = now.getMinutes();
+
+	if (closeTime.h < hours || (closeTime.h == hours && closeTime.m <= minutes)) {
+		console.log('what are you doing in the school?');
+		return;
+	}
 
 	let i = 0;
 	for (; i < classTimes.length - 1; i++) {
