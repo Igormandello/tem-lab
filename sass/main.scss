@@ -6,24 +6,53 @@
 
 html {
   font-family: 'Nunito', sans-serif;
+  overflow-y: hidden;
 }
 
 section {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  justify-content: space-around;
   background-color: #3f3f3f;
 
   p {
+    position: absolute;
     text-align: center;
     font-size: 8rem;
+    line-height: 8rem;
     color: white;
     align-self: center;
+    filter: none;
+    transform: translateY(calc(50vh - 4rem));
+    transition: transform 1s, font-size 1s, color 1s, filter 1s;
 
-    &:first-child, &:last-child {
+    &.last, &.next {
       font-size: 5rem;
+      line-height: 5rem;
       filter: brightness(0.8) blur(2px);
+    }
+
+    &.last {
+      transform: translateY(50px);
+    }
+
+    &.next {
+      transform: translateY(calc(100vh - 5rem - 50px));
+    }
+
+    &.before-last, &.after-next {
+      transform: translateY(-5rem);
+      font-size: 2.5rem;
+      line-height: 2.5rem;
+      filter: brightness(0.8) blur(20px);
+    }
+
+    &.before-last {
+      transform: translateY(-5rem);
+    } 
+    
+    &.after-next {
+      transform: translateY(calc(100vh + 5rem));
     }
   }
 }
