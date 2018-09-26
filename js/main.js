@@ -1,33 +1,3 @@
-const excel = `Aula Reforço
-2o. INFO - Marcia
-2o. INFO - Marcia
-2o. INFO - André
-2o. INFO - André
-
-Aula Reforço
-2o. INFO -  Patricia
-2o. INFO -  Patricia
-2o. INFO -  Patricia
-2o. INFO -  Patricia
-
-2o. INFO - Samuel
-2o. INFO - Samuel
-2o. INFO - Simone
-2o. INFO - Simone
-2o. INFO - Simone
-
-Aula Reforço
-2o. INFO -  Sérgio
-2o. INFO -  Sérgio
-2o. INFO -  André
-2o. INFO -  André
-
-Aula Reforço
-Aula Reforço
-Aula Reforço
-2o. INFO -  André
-2o. INFO -  André`;
-
 const classTimes = [
 	{ h: 7, m: 30 },
 	{ h: 8, m: 20 },
@@ -35,6 +5,14 @@ const classTimes = [
 	{ h: 10, m: 00, interval: true },
 	{ h: 10, m: 15 },
 	{ h: 11, m: 05 },
+	{ h: 11, m: 55, interval: true },
+	{ h: 13, m: 00 },
+	{ h: 13, m: 50 },
+	{ h: 14, m: 40 },
+	{ h: 15, m: 30 },
+	{ h: 15, m: 45, interval: true },
+	{ h: 16, m: 35 },
+	{ h: 17, m: 25 },
 ]
 
 const duration = 50;
@@ -54,8 +32,19 @@ const labNames = [
 ]
 
 var schedule;
-function setup() {
-	let classes = excel.split('\n');
+function load(callback) {
+	let request = new XMLHttpRequest();
+	request.open('GET', '/js/schedule.txt');
+	request.send(null);
+
+	request.onreadystatechange = function() {
+		if (request.readyState == 4 && request.status == 200)
+			callback(request.responseText);
+	}
+}
+
+function setup(data) {
+	let classes = data.split('\n');
 
 	schedule = {};
 	for (let i = 0; i < weekdays.length; i++) {
@@ -64,10 +53,15 @@ function setup() {
 			actualWeekday[labNames[n]] = [];
 
 		schedule[weekdays[i]] = actualWeekday;
-		for (let n = 0; n < 5; n++)
-			schedule[weekdays[i]].dinalva.push(classes[i * 6 + n]); //6 to skip the separator between each day
+		let timeIndex = 0;
+		for (let n = 0; n < classTimes.length; n++)
+			if (!classTimes[n].interval) {
+				timeIndex++;
+				schedule[weekdays[i]].dinalva.push(classes[i * (classTimes.length + 1) + timeIndex]); //6 to skip the separator between each day
+			}
 	}
 
+	console.log(schedule);
 	lab();
 }
 
@@ -95,4 +89,4 @@ function lab() {
 		console.log(schedule[weekday].dinalva[classIndex]);
 }
 
-setup();
+load(setup);
