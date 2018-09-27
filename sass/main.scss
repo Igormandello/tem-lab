@@ -1,3 +1,9 @@
+$main-size: 8rem;
+$main-size-sm: 5rem;
+
+$secondary-size: 5rem;
+$secondary-size-sm: 3.5rem;
+
 *, *::before, *::after {
   margin: 0;
   padding: 0;
@@ -6,7 +12,7 @@
 
 html {
   font-family: 'Nunito', sans-serif;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
 section {
@@ -19,24 +25,24 @@ section {
     position: absolute;
     color: white;
     align-self: center;
+    white-space: nowrap;
     transition: transform 1s, font-size 1s, color 1s, filter 1s;
 
     &.last, &.next {
-      font-size: 5rem;
-      line-height: 5rem;
+      font-size: $secondary-size;
+      line-height: $secondary-size;
       filter: brightness(0.8) blur(2px);
     }
 
     &.last {
-      transform: translateY(50px);
+      transform: translateY(4rem);
     }
 
     &.next {
-      transform: translateY(calc(100vh - 5rem - 50px));
+      transform: translateY(calc(100vh - #{$secondary-size} - 4rem));
     }
 
     &.before-last, &.after-next {
-      transform: translateY(-5rem);
       font-size: 2.5rem;
       line-height: 2.5rem;
       filter: brightness(0.8) blur(20px);
@@ -51,10 +57,10 @@ section {
     }
 
     &.current {
-      font-size: 8rem;
-      line-height: 8rem;
+      font-size: $main-size;
+      line-height: $main-size;
       filter: none;
-      transform: translateY(calc(50vh - 4rem));
+      transform: translateY(calc(50vh - #{$main-size / 2}));
     }
   }
 }

@@ -55,7 +55,7 @@ function classesCycle() {
 function setText(element, classes) {
   if (classes === null)
     element.innerText = 'Claro que não';
-  else if (classes.some(obj => obj === '-' || obj.includes('Aula Reforço')))
+  else if (classes.some(obj => obj === '-' || obj.includes('Aula Reforço') || obj === 'Interval'))
     element.innerText = 'Tem';
   else
     element.innerText = 'Não tem';
