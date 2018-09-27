@@ -8,11 +8,11 @@ $secondary-size-sm: 3.5rem;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 html {
   font-family: 'Nunito', sans-serif;
-  overflow: hidden;
 }
 
 section {
@@ -20,17 +20,18 @@ section {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  width: 100vw;
   background-color: transparent;
   
   &::before {
     content: "";
     position: absolute;
-    top: -25vw;
-    left: -25vw;
-    min-width: 150vh;
-    width: 150vw;
-    min-height: 150vw;
-    height: 150vh;
+    top: -50%;
+    left:-50%;
+    min-width: 200vh;
+    width: 200vw;
+    min-height: 200vw;
+    height: 200vh;
     transform-origin: center center;
     background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
     linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
@@ -136,5 +137,56 @@ section {
 
   to {
     transform: rotateZ(360deg);
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  section div {  
+    &.last, &.next {
+      font-size: $secondary-size-sm;
+      line-height: $secondary-size-sm;
+
+      span {
+        font-size: $secondary-size-sm / 4;
+        line-height: $secondary-size-sm / 4;
+        height: $secondary-size-sm / 4;
+
+        &.time {
+          top: calc(50% - #{$secondary-size-sm / 8});
+        }
+      }
+    }
+
+    &.next {
+      transform: translateY(calc(100vh - #{$secondary-size-sm * 1.25} - 4rem));
+    }
+
+    &.current {
+      font-size: $main-size-sm;
+      line-height: $main-size-sm;
+      transform: translateY(calc(50vh - #{$main-size-sm * 5 / 8}));
+
+      span {
+        font-size: $main-size-sm / 4;
+        line-height: $main-size-sm / 4;
+        height: $main-size-sm / 4;
+
+        &.time {
+          top: calc(50% - #{$main-size-sm / 8});
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 425px) {
+  html {
+    font-size: 8px;
   }
 }
