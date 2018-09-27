@@ -16,10 +16,28 @@ html {
 }
 
 section {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #3f3f3f;
+  background-color: transparent;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    top: -25vw;
+    left: -25vw;
+    min-width: 150vh;
+    width: 150vw;
+    min-height: 150vw;
+    height: 150vh;
+    transform-origin: center center;
+    background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+    linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
+    linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
+
+    animation: change-colors 10s infinite linear;
+  }
 
   div {
     position: absolute;
@@ -29,10 +47,7 @@ section {
     white-space: nowrap;
     width: 90%;
     transition: all 1s;
-
-    p {
-      transition: inherit;
-    }
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
 
     span {
       display: block;
@@ -47,7 +62,7 @@ section {
     &.last, &.next {
       font-size: $secondary-size;
       line-height: $secondary-size;
-      filter: brightness(0.8) blur(2px);
+      filter: brightness(0.8) blur(1px);
 
       span {
         font-size: $secondary-size / 4;
@@ -111,5 +126,15 @@ section {
         }
       }
     }
+  }
+}
+
+@keyframes change-colors {
+  from {
+    transform: rotateZ(0);
+  }
+
+  to {
+    transform: rotateZ(360deg);
   }
 }

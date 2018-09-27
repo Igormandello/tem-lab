@@ -150,7 +150,7 @@ function setupData(time) {
     };
   } else {
     let lastClasses = null;
-    if (i - 0 >= 0)
+    if (i - 1 >= 0)
       lastClasses = [
         schedule[weekday].Dinalva[i - 1],
         schedule[weekday].Claudio[i - 1],
@@ -159,7 +159,7 @@ function setupData(time) {
 
 		return {
 			lastClasses: {
-				time: classTimes[i - 1],
+				time: (classTimes[i - 1] ? classTimes[i - 1] : closeTime),
 				classes: lastClasses,
 			},
       currentClasses: {

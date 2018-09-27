@@ -11,8 +11,9 @@ function load(callback) {
 
 window.onload = () => {
   load(() => {
-    let now = new Date(Date.now()),
-        data = setupData(now),
+    let now = new Date(Date.now());
+    
+    let data = setupData(now),
         next = nextClasses(now);
     console.log(data, next);
   
@@ -28,7 +29,6 @@ window.onload = () => {
 
 function classesCycle() {
   let now = new Date(Date.now());
-  //now.setHours(0);
   let classes = nextClasses(now);
   console.log(classes);
 
@@ -38,7 +38,7 @@ function classesCycle() {
   document.querySelector('div.next').classList = 'current';
 
   let afterNext = document.querySelector('div.after-next');
-  setText(afterNext.querySelector('p'), classes);
+  setText(afterNext, classes);
   afterNext.classList = 'next';
 
   let newDiv = document.querySelector('section').appendChild(document.createElement('div'));
