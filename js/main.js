@@ -15,14 +15,9 @@ window.onload = () => {
     let classes = lab(now);
     console.log(classes);
   
-    let beforeP = document.querySelector('p.last');
-    setText(beforeP, classes.lastClasses);
-  
-    let mainP = document.querySelector('p.current');
-    setText(mainP, classes.currentClasses);
-  
-    let afterP = document.querySelector('p.next');
-    setText(afterP, classes.nextClasses);
+    setText(document.querySelector('div.last'), classes.lastClasses);
+    setText(document.querySelector('div.current'), classes.currentClasses);
+    setText(document.querySelector('div.next'), classes.nextClasses);
   
     let timeRemaining = checkNext(now);
     console.log(timeRemaining / 60000);
@@ -36,37 +31,57 @@ function classesCycle() {
   let classes = lab(now);
   console.log(classes);
 
-  document.querySelector('p.before-last').remove();
-  document.querySelector('.last').classList = 'before-last';
-  document.querySelector('.current').classList = 'last';
-  document.querySelector('.next').classList = 'current';
+  document.querySelector('div.before-last').remove();
+  document.querySelector('div.last').classList = 'before-last';
+  document.querySelector('div.current').classList = 'last';
+  document.querySelector('div.next').classList = 'current';
 
-  let afterNext = document.querySelector('.after-next');
-  setText(afterNext, classes.nextClasses);
+  let afterNext = document.querySelector('div.after-next');
+  setText(afterNext.querySelector('p'), classes.nextClasses);
   afterNext.classList = 'next';
 
-  document.querySelector('section').appendChild(document.createElement('p')).classList = 'after-next';
+  let newDiv = document.querySelector('section').appendChild(document.createElement('div'));
+  newDiv.classList = 'after-next';
+  newDiv.appendChild(document.createElement('p'));
+  newDiv.appendChild(document.createElement('span'));
+  newDiv.appendChild(document.createElement('span')).classList = 'time';
 
   let timeRemaining = checkNext(now);
   console.log(timeRemaining / 60000);
   setTimeout(classesCycle, timeRemaining);
 }
 
-function setText(element, classes) {
-  if (classes === null)
-    element.innerText = 'Claro que não';
-  else if (classes.some(obj => obj === '-' || obj.includes('Aula Reforço') || obj === 'Interval'))
-    element.innerText = 'Tem';
-  else
-    element.innerText = 'Não tem';
+function setText(div, classes) {
+  if (classes === null) {
+    div.children[0].innerText = 'NÃO';
+    div.children[1].innerText = 'Olha a hora wtf';
+  } else {
+    let available = [];
+    for (let i = 0; i < classes.length; i++)
+      if (classes[i] === '-' || classes[i].includes('Aula Reforço') || classes[i] === 'Interval')
+        available.push(labNames[i]);
+    
+    if (available.length == 0) {
+      div.children[0].innerText = 'Não tem';
+      div.children[1].innerText = 'This is so sad';
+    } else {
+      div.children[0].innerText = 'Tem';
+      div.children[1].innerText = available.join(', ');
+    }
+  }
+
+  div.children[2].innerText = '7:30';
 }
 
 function checkNext(now) {
   let h = now.getHours(),
       m = now.getMinutes();
 
-  let t = 0;
-  for (let i = 0; i < classTimes.length - 1; i++) {
+  let t = (closeTime.h - h) * 60 + closeTime.m - m;
+  t *= 60;
+  t *= 1000;
+
+  for (let i = 0; i < classTimes.length; i++) {
     let classTime = classTimes[i];
 
     if (classTime.h > h || (classTime.h == h && classTime.m > m)) {

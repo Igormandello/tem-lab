@@ -37,9 +37,9 @@ const weekdays = [
 ];
 
 const labNames = [
-	'dinalva',
-	'claudio',
-	'lapa'
+	'Dinalva',
+	'Claudio',
+	'LaPA'
 ]
 
 var schedule;
@@ -84,23 +84,23 @@ function lab(time) {
 
 	if (closeTime.h < hours || (closeTime.h == hours && closeTime.m <= minutes)) {
     let lastClass = [ 
-      schedule[weekday].dinalva[classTimes.length - 1],
-      schedule[weekday].claudio[classTimes.length - 1],
-      schedule[weekday].lapa[classTimes.length - 1]
+      schedule[weekday].Dinalva[classTimes.length - 1],
+      schedule[weekday].Claudio[classTimes.length - 1],
+      schedule[weekday].LaPA[classTimes.length - 1]
     ];
 
     let nextClasses;
     if (weekday === weekdays[weekdays.length - 1])
       nextClasses = [
-        schedule[weekdays[0]].dinalva[0],
-        schedule[weekdays[0]].claudio[0],
-        schedule[weekdays[0]].lapa[0]
+        schedule[weekdays[0]].Dinalva[0],
+        schedule[weekdays[0]].Claudio[0],
+        schedule[weekdays[0]].LaPA[0]
       ];
     else
       nextClasses = [
-        schedule[weekdays[time.getDay()]].dinalva[0],
-        schedule[weekdays[time.getDay()]].claudio[0],
-        schedule[weekdays[time.getDay()]].lapa[0]
+        schedule[weekdays[time.getDay()]].Dinalva[0],
+        schedule[weekdays[time.getDay()]].Claudio[0],
+        schedule[weekdays[time.getDay()]].LaPA[0]
       ];
 
     return {
@@ -124,49 +124,49 @@ function lab(time) {
 		let lastClasses;
     if (weekday === weekdays[0])
       lastClasses = [
-        schedule[weekdays[weekdays.length - 1]].dinalva[classTimes.length - 1],
-        schedule[weekdays[weekdays.length - 1]].claudio[classTimes.length - 1],
-        schedule[weekdays[weekdays.length - 1]].lapa[classTimes.length - 1]
+        schedule[weekdays[weekdays.length - 1]].Dinalva[classTimes.length - 1],
+        schedule[weekdays[weekdays.length - 1]].Claudio[classTimes.length - 1],
+        schedule[weekdays[weekdays.length - 1]].LaPA[classTimes.length - 1]
       ];
     else
       lastClasses = [
-        schedule[weekdays[time.getDay() - 2]].dinalva[classTimes.length - 1],
-        schedule[weekdays[time.getDay() - 2]].claudio[classTimes.length - 1],
-        schedule[weekdays[time.getDay() - 2]].lapa[classTimes.length - 1]
+        schedule[weekdays[time.getDay() - 2]].Dinalva[classTimes.length - 1],
+        schedule[weekdays[time.getDay() - 2]].Claudio[classTimes.length - 1],
+        schedule[weekdays[time.getDay() - 2]].LaPA[classTimes.length - 1]
       ];
 
 		return {
       lastClasses: lastClasses,
       currentClasses: null,
       nextClasses: [
-        schedule[weekday].dinalva[0],
-        schedule[weekday].claudio[0],
-        schedule[weekday].lapa[0]
+        schedule[weekday].Dinalva[0],
+        schedule[weekday].Claudio[0],
+        schedule[weekday].LaPA[0]
       ]
     };
   } else {
     let lastClasses = null;
     if (i - 0 >= 0)
       lastClasses = [
-        schedule[weekday].dinalva[i - 1],
-        schedule[weekday].claudio[i - 1],
-        schedule[weekday].lapa[i - 1]
+        schedule[weekday].Dinalva[i - 1],
+        schedule[weekday].Claudio[i - 1],
+        schedule[weekday].LaPA[i - 1]
       ];
 
     let nextClasses = null;
     if (i + 1 < classTimes.length)
       nextClasses = [
-        schedule[weekday].dinalva[i + 1],
-        schedule[weekday].claudio[i + 1],
-        schedule[weekday].lapa[i + 1]
+        schedule[weekday].Dinalva[i + 1],
+        schedule[weekday].Claudio[i + 1],
+        schedule[weekday].LaPA[i + 1]
       ];
 
 		return {
       lastClasses: lastClasses,
       currentClasses: [
-        schedule[weekday].dinalva[i],
-        schedule[weekday].claudio[i],
-        schedule[weekday].lapa[i]
+        schedule[weekday].Dinalva[i],
+        schedule[weekday].Claudio[i],
+        schedule[weekday].LaPA[i]
       ],
       nextClasses: nextClasses
     };

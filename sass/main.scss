@@ -21,17 +21,40 @@ section {
   height: 100vh;
   background-color: #3f3f3f;
 
-  p {
+  div {
     position: absolute;
     color: white;
     align-self: center;
+    text-align: center;
     white-space: nowrap;
+    width: 90%;
     transition: transform 1s, font-size 1s, color 1s, filter 1s;
+
+    span {
+      display: block;
+
+      &.time {
+        position: absolute;
+        left: 0;
+      }
+    }
 
     &.last, &.next {
       font-size: $secondary-size;
       line-height: $secondary-size;
       filter: brightness(0.8) blur(2px);
+
+      span {
+        font-size: $secondary-size / 4;
+        line-height: $secondary-size / 4;
+        height: $secondary-size / 4;
+
+        &.time {
+          top: calc(50% - #{$secondary-size / 8});
+        }
+      }
+
+      width: 80%;
     }
 
     &.last {
@@ -39,7 +62,7 @@ section {
     }
 
     &.next {
-      transform: translateY(calc(100vh - #{$secondary-size} - 4rem));
+      transform: translateY(calc(100vh - #{$secondary-size * 1.25} - 4rem));
     }
 
     &.before-last, &.after-next {
@@ -60,7 +83,17 @@ section {
       font-size: $main-size;
       line-height: $main-size;
       filter: none;
-      transform: translateY(calc(50vh - #{$main-size / 2}));
+      transform: translateY(calc(50vh - #{$main-size * 5 / 8}));
+
+      span {
+        font-size: $main-size / 4;
+        line-height: $main-size / 4;
+        height: $main-size / 4;
+
+        &.time {
+          top: calc(50% - #{$main-size / 8});
+        }
+      }
     }
   }
 }
