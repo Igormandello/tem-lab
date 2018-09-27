@@ -19,9 +19,12 @@ section {
     text-align: center;
     white-space: nowrap;
     width: 90%;
-    transition: transform 1s, font-size 1s, color 1s, filter 1s; }
+    transition: all 1s; }
+    section div p {
+      transition: inherit; }
     section div span {
-      display: block; }
+      display: block;
+      transition: inherit; }
       section div span.time {
         position: absolute;
         left: 0; }
@@ -43,7 +46,14 @@ section {
     section div.before-last, section div.after-next {
       font-size: 2.5rem;
       line-height: 2.5rem;
+      width: 60%;
       filter: brightness(0.8) blur(20px); }
+      section div.before-last span, section div.after-next span {
+        font-size: 1rem;
+        line-height: 1rem;
+        height: 1rem; }
+        section div.before-last span.time, section div.after-next span.time {
+          top: calc(50% - .5rem); }
     section div.before-last {
       transform: translateY(-5rem); }
     section div.after-next {
