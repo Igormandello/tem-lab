@@ -1,4 +1,4 @@
-const gistURL = 'https://gist.github.com/Igormandello/a8d8d01fb9997c1120a18a2b1bdf20ad/raw/';
+const gistURL = 'https://gist.githubusercontent.com/Igormandello/a8d8d01fb9997c1120a18a2b1bdf20ad/raw/';
 
 const labNames = [
 	'Dinalva',
