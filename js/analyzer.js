@@ -1,4 +1,3 @@
-const gistURL = 'https://gist.githubusercontent.com/Igormandello/a8d8d01fb9997c1120a18a2b1bdf20ad/raw/3439ce0ae2c27282182fcf15268d1266834d420d/Schedule';
 const classTimes = [
 	{ h: 7, m: 30 },
 	{ h: 8, m: 20 },
@@ -6,7 +5,7 @@ const classTimes = [
 	{ h: 10, m: 00, interval: true },
 	{ h: 10, m: 15 },
 	{ h: 11, m: 05 },
-	{ h: 11, m: 55, interval: true },
+	{ h: 11, m: 55, lunch: true },
 	{ h: 13, m: 00 },
 	{ h: 13, m: 50 },
 	{ h: 14, m: 40 },
@@ -36,193 +35,159 @@ const weekdays = [
 	'friday'
 ];
 
-const labNames = [
-	'Dinalva',
-	'Claudio',
-	'LaPA'
-]
+function Analyzer(data, classrooms) {
 
-var schedule;
-function setup(data, callback) {
+	this.schedule = {};
+
+	this.currentClass = function(time) {
+		let hours = time.getHours(),
+				minutes = time.getMinutes();
+
+		if (hours > closeTime.h || (hours == closeTime.h && minutes >= closeTime.m))
+			return -1;
+
+		let i = 0;
+		for (; i < classTimes.length - 1; i++) {
+			let classTime = classTimes[i];
+
+			if (classTime.h > hours || (classTime.h == hours && classTime.m > minutes)) {
+				i--; //The next class is i, so the current class is i - 1 
+				break;
+			}
+		}
+
+		return i;
+	},
+
+	this.setupData = function(time) {
+		let weekday = weekdays[time.getDay() - 1],
+				hours = time.getHours(),
+				minutes = time.getMinutes();
+
+		if (closeTime.h < hours || (closeTime.h == hours && closeTime.m <= minutes)) {
+			let lastClasses = this.schedule[weekday][classTimes.length - 1];
+
+			return {
+				lastClasses: {
+					time: classTimes[classTimes.length - 1],
+					classrooms: lastClasses,
+				},
+				currentClasses: {
+					time: closeTime,
+					classrooms: null
+				}
+			};
+		}
+
+		let i = this.currentClass(time);
+
+		if (i < 0) {
+			let lastClasses;
+			if (weekday === weekdays[0])
+				lastClasses = this.schedule[weekdays[weekdays.length - 1]][classTimes.length - 1];
+			else
+				lastClasses = this.schedule[weekdays[time.getDay() - 2]][classTimes.length - 1];
+
+			return {
+				lastClasses: {
+					time: classTimes[classTimes.length - 1],
+					classrooms: lastClasses
+				},
+				currentClasses: {
+					time: closeTime,
+					classrooms: null
+				}
+			};
+		} else {
+			let lastClasses = null;
+			if (i - 1 >= 0)
+				lastClasses =	this.schedule[weekday][i - 1];
+
+			return {
+				lastClasses: {
+					time: (classTimes[i - 1] ? classTimes[i - 1] : closeTime),
+					classrooms: lastClasses,
+				},
+				currentClasses: {
+					time: classTimes[i],
+					classrooms: this.schedule[weekday][i]
+				}
+			};
+		}
+	},
+
+	this.nextClasses = function(time) {
+		let weekday = weekdays[time.getDay() - 1],
+				hours = time.getHours(),
+				minutes = time.getMinutes();
+
+		if (closeTime.h < hours || (closeTime.h == hours && closeTime.m <= minutes)) {
+			let nextClasses;
+			if (weekday === weekdays[weekdays.length - 1])
+				nextClasses = this.schedule[weekdays[0]][0];
+			else
+				nextClasses = this.schedule[weekdays[time.getDay()]][0];
+
+			return {
+				time: classTimes[0],
+				classrooms: nextClasses
+			}
+		}
+
+		let i = this.currentClass(time);
+
+		if (i < 0) {
+			return {
+				time: classTimes[0],
+				classrooms: this.schedule[weekday][0]
+			};
+		} else {
+			let nextClasses = null;
+			if (i + 1 < classTimes.length)
+				nextClasses = this.schedule[weekday][i + 1];
+
+			return {
+				time: classTimes[i + 1],
+				classrooms: nextClasses
+			};
+		}
+	}
+
 	let classes = data.split('\n');
-
 	let intervalQtty = 0;
 	classTimes.forEach(obj => {
 		if (obj.interval)
 			intervalQtty++;
 	});
 
-	schedule = {};
-	for (let i = 0; i < weekdays.length; i++) {
-		let weekday = {};
-		for (let n = 0; n < labNames.length; n++) {
-			let lab = [];
-
-			let timeIndex = 0;
-			for (let j = 0; j < classTimes.length; j++)
-				if (!classTimes[j].interval) {
-					//+1 to skip the separator between each day
-					let currentClass = classes[(i * 3 + n) * (classTimes.length - intervalQtty + 1) + timeIndex];
-
-					lab.push(currentClass); 
-					timeIndex++;
-				} else
-				lab.push('Interval'); 
-
-			weekday[labNames[n]] = lab;
-			schedule[weekdays[i]] = weekday;
+	weekdays.forEach(obj => this.schedule[obj] = []);
+	
+	let weekdayIndex = 0;
+	for (let i = 0; i < classes.length; i++) {
+		if (classes[i] == '&') {
+			weekdayIndex = 0;
+			continue;
 		}
+		
+		if (classes[i] == '-') {
+			weekdayIndex++;
+			continue;
+		}
+
+		let currentDay = classes[i].split(/\t/).map(obj => obj.toUpperCase());
+		
+		let freeRooms = [].concat(classrooms);
+		freeRooms = freeRooms.filter(obj => !currentDay.includes(obj.toUpperCase()));
+
+		let dayHour = this.schedule[weekdays[weekdayIndex]];
+		if (classTimes[dayHour.length])
+			if (classTimes[dayHour.length].interval)
+				dayHour.push(classrooms);
+			else if (classTimes[dayHour.length].lunch)
+				dayHour.push([]);
+
+		dayHour.push(freeRooms);
 	}
 
-	callback();
-}
-
-function currentClass(time) {
-	let hours = time.getHours(),
-			minutes = time.getMinutes();
-
-	if (hours > closeTime.h || (hours == closeTime.h && minutes >= closeTime.m))
-		return -1;
-
-	let i = 0;
-	for (; i < classTimes.length - 1; i++) {
-		let classTime = classTimes[i];
-
-		if (classTime.h > hours || (classTime.h == hours && classTime.m > minutes)) {
-			i--; //The next class is i, so the current class is i - 1 
-			break;
-		}
-	}
-
-	return i;
-}
-
-function setupData(time) {
-	let weekday = weekdays[time.getDay() - 1],
-			hours = time.getHours(),
-			minutes = time.getMinutes();
-
-	if (closeTime.h < hours || (closeTime.h == hours && closeTime.m <= minutes)) {
-    let lastClasses = [ 
-      schedule[weekday].Dinalva[classTimes.length - 1],
-      schedule[weekday].Claudio[classTimes.length - 1],
-      schedule[weekday].LaPA[classTimes.length - 1]
-    ];
-
-    return {
-			lastClasses: {
-				time: classTimes[classTimes.length - 1],
-				classes: lastClasses,
-			},
-      currentClasses: {
-				time: closeTime,
-				classes: null
-			}
-    };
-  }
-
-	let i = currentClass(time);
-
-	if (i < 0) {
-		let lastClasses;
-    if (weekday === weekdays[0])
-      lastClasses = [
-        schedule[weekdays[weekdays.length - 1]].Dinalva[classTimes.length - 1],
-        schedule[weekdays[weekdays.length - 1]].Claudio[classTimes.length - 1],
-        schedule[weekdays[weekdays.length - 1]].LaPA[classTimes.length - 1]
-      ];
-    else
-      lastClasses = [
-        schedule[weekdays[time.getDay() - 2]].Dinalva[classTimes.length - 1],
-        schedule[weekdays[time.getDay() - 2]].Claudio[classTimes.length - 1],
-        schedule[weekdays[time.getDay() - 2]].LaPA[classTimes.length - 1]
-      ];
-
-		return {
-			lastClasses: {
-				time: classTimes[classTimes.length - 1],
-				classes: lastClasses
-			},
-      currentClasses: {
-				time: closeTime,
-				classes: null
-			}
-    };
-  } else {
-    let lastClasses = null;
-    if (i - 1 >= 0)
-      lastClasses = [
-        schedule[weekday].Dinalva[i - 1],
-        schedule[weekday].Claudio[i - 1],
-        schedule[weekday].LaPA[i - 1]
-      ];
-
-		return {
-			lastClasses: {
-				time: (classTimes[i - 1] ? classTimes[i - 1] : closeTime),
-				classes: lastClasses,
-			},
-      currentClasses: {
-				time: classTimes[i],
-				classes: [
-					schedule[weekday].Dinalva[i],
-					schedule[weekday].Claudio[i],
-					schedule[weekday].LaPA[i]
-				]
-			}
-    };
-  }
-}
-
-function nextClasses(time) {
-	let weekday = weekdays[time.getDay() - 1],
-			hours = time.getHours(),
-			minutes = time.getMinutes();
-
-	if (closeTime.h < hours || (closeTime.h == hours && closeTime.m <= minutes)) {
-    let nextClasses;
-    if (weekday === weekdays[weekdays.length - 1])
-      nextClasses = [
-        schedule[weekdays[0]].Dinalva[0],
-        schedule[weekdays[0]].Claudio[0],
-        schedule[weekdays[0]].LaPA[0]
-      ];
-    else
-      nextClasses = [
-        schedule[weekdays[time.getDay()]].Dinalva[0],
-        schedule[weekdays[time.getDay()]].Claudio[0],
-        schedule[weekdays[time.getDay()]].LaPA[0]
-      ];
-
-    return {
-      time: classTimes[0],
-      classes: nextClasses
-    }
-  }
-
-	let i = currentClass(time);
-
-	if (i < 0) {
-		return {
-      time: classTimes[0],
-      classes: [
-        schedule[weekday].Dinalva[0],
-        schedule[weekday].Claudio[0],
-        schedule[weekday].LaPA[0]
-      ]
-    };
-  } else {
-    let nextClasses = null;
-    if (i + 1 < classTimes.length)
-      nextClasses = [
-        schedule[weekday].Dinalva[i + 1],
-        schedule[weekday].Claudio[i + 1],
-        schedule[weekday].LaPA[i + 1]
-      ];
-
-		return {
-			time: classTimes[i + 1],
-			classes: nextClasses
-    };
-  }
+	console.log(this.schedule);
 }
