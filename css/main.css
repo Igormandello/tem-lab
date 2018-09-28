@@ -1,0 +1,155 @@
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+html {
+  font-family: "Nunito", sans-serif;
+}
+
+section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: transparent;
+}
+section::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  min-width: 200vh;
+  width: 200vw;
+  min-height: 200vw;
+  height: 200vh;
+  transform-origin: center center;
+  background: linear-gradient(217deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0) 70.71%), linear-gradient(127deg, rgba(0, 255, 0, 0.8), rgba(0, 255, 0, 0) 70.71%), linear-gradient(336deg, rgba(0, 0, 255, 0.8), rgba(0, 0, 255, 0) 70.71%);
+  animation: change-colors 10s infinite linear;
+}
+section div {
+  position: absolute;
+  color: white;
+  align-self: center;
+  text-align: center;
+  white-space: nowrap;
+  width: 90%;
+  transition: all 1s;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+}
+section div span {
+  display: block;
+  transition: inherit;
+}
+section div span.time {
+  position: absolute;
+  left: 0;
+}
+section div.last, section div.next {
+  font-size: 5rem;
+  line-height: 5rem;
+  filter: brightness(0.8) blur(1px);
+  width: 80%;
+}
+section div.last span, section div.next span {
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+  height: 1.25rem;
+}
+section div.last span.time, section div.next span.time {
+  top: calc(50% - 0.625rem);
+}
+section div.last {
+  transform: translateY(4rem);
+}
+section div.next {
+  transform: translateY(calc(100vh - 6.25rem - 4rem));
+}
+section div.before-last, section div.after-next {
+  font-size: 2.5rem;
+  line-height: 2.5rem;
+  width: 60%;
+  filter: brightness(0.8) blur(20px);
+}
+section div.before-last span, section div.after-next span {
+  font-size: 1rem;
+  line-height: 1rem;
+  height: 1rem;
+}
+section div.before-last span.time, section div.after-next span.time {
+  top: calc(50% - .5rem);
+}
+section div.before-last {
+  transform: translateY(-5rem);
+}
+section div.after-next {
+  transform: translateY(calc(100vh + 5rem));
+}
+section div.current {
+  font-size: 8rem;
+  line-height: 8rem;
+  filter: none;
+  transform: translateY(calc(50vh - 5rem));
+}
+section div.current span {
+  font-size: 2rem;
+  line-height: 2rem;
+  height: 2rem;
+}
+section div.current span.time {
+  top: calc(50% - 1rem);
+}
+
+@keyframes change-colors {
+  from {
+    transform: rotateZ(0);
+  }
+  to {
+    transform: rotateZ(360deg);
+  }
+}
+@media only screen and (max-width: 1024px) {
+  html {
+    font-size: 12px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  section div.last, section div.next {
+    font-size: 3.5rem;
+    line-height: 3.5rem;
+  }
+  section div.last span, section div.next span {
+    font-size: 0.875rem;
+    line-height: 0.875rem;
+    height: 0.875rem;
+  }
+  section div.last span.time, section div.next span.time {
+    top: calc(50% - 0.4375rem);
+  }
+  section div.next {
+    transform: translateY(calc(100vh - 4.375rem - 4rem));
+  }
+  section div.current {
+    font-size: 5rem;
+    line-height: 5rem;
+    transform: translateY(calc(50vh - 3.125rem));
+  }
+  section div.current span {
+    font-size: 1.25rem;
+    line-height: 1.25rem;
+    height: 1.25rem;
+  }
+  section div.current span.time {
+    top: calc(50% - 0.625rem);
+  }
+}
+@media only screen and (max-width: 425px) {
+  html {
+    font-size: 8px;
+  }
+}
+
+/*# sourceMappingURL=main.css.map */
