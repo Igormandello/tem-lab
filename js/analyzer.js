@@ -35,13 +35,7 @@ const weekdays = [
 	'friday'
 ];
 
-const labNames = [
-	'Dinalva',
-	'Claudio',
-	'LaPA'
-]
-
-function Analyzer(data) {
+function Analyzer(data, classrooms) {
 
 	this.schedule = {};
 
@@ -202,24 +196,31 @@ function Analyzer(data) {
 			intervalQtty++;
 	});
 
-	for (let i = 0; i < weekdays.length; i++) {
-		let weekday = {};
-		for (let n = 0; n < labNames.length; n++) {
-			let lab = [];
+	weekdays.forEach(obj => this.schedule[obj] = []);
+	console.log(classes);
 
-			let timeIndex = 0;
-			for (let j = 0; j < classTimes.length; j++)
-				if (!classTimes[j].interval) {
-					//+1 to skip the separator between each day
-					let currentClass = classes[(i * 3 + n) * (classTimes.length - intervalQtty + 1) + timeIndex];
-
-					lab.push(currentClass); 
-					timeIndex++;
-				} else
-				lab.push('Interval'); 
-
-			weekday[labNames[n]] = lab;
-			this.schedule[weekdays[i]] = weekday;
+	let weekdayIndex = 0;
+	for (let i = 0; i < classes.length; i++) {
+		if (classes[i] == '&') {
+			weekdayIndex = 0;
+			continue;
 		}
+		
+		if (classes[i] == '-') {
+			weekdayIndex++;
+			continue;
+		}
+
+		let currentDay = classes[i].split(/\t/).map(obj => obj.toUpperCase());
+		
+		let freeRooms = [].concat(classrooms);
+		freeRooms = freeRooms.filter(obj => !currentDay.includes(obj.toUpperCase()));
+
+		if (classTimes[this.schedule[weekdays[weekdayIndex]].length] && classTimes[this.schedule[weekdays[weekdayIndex]].length].interval)
+			this.schedule[weekdays[weekdayIndex]].push(classrooms);
+
+		this.schedule[weekdays[weekdayIndex]].push(freeRooms);
 	}
+
+	console.log(this.schedule);
 }
