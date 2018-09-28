@@ -5,7 +5,7 @@ const classTimes = [
 	{ h: 10, m: 00, interval: true },
 	{ h: 10, m: 15 },
 	{ h: 11, m: 05 },
-	{ h: 11, m: 55, interval: true },
+	{ h: 11, m: 55, lunch: true },
 	{ h: 13, m: 00 },
 	{ h: 13, m: 50 },
 	{ h: 14, m: 40 },
@@ -161,8 +161,7 @@ function Analyzer(data, classrooms) {
 	});
 
 	weekdays.forEach(obj => this.schedule[obj] = []);
-	console.log(classes);
-
+	
 	let weekdayIndex = 0;
 	for (let i = 0; i < classes.length; i++) {
 		if (classes[i] == '&') {
@@ -180,10 +179,14 @@ function Analyzer(data, classrooms) {
 		let freeRooms = [].concat(classrooms);
 		freeRooms = freeRooms.filter(obj => !currentDay.includes(obj.toUpperCase()));
 
-		if (classTimes[this.schedule[weekdays[weekdayIndex]].length] && classTimes[this.schedule[weekdays[weekdayIndex]].length].interval)
-			this.schedule[weekdays[weekdayIndex]].push(classrooms);
+		let dayHour = this.schedule[weekdays[weekdayIndex]];
+		if (classTimes[dayHour.length])
+			if (classTimes[dayHour.length].interval)
+				dayHour.push(classrooms);
+			else if (classTimes[dayHour.length].lunch)
+				dayHour.push([]);
 
-		this.schedule[weekdays[weekdayIndex]].push(freeRooms);
+		dayHour.push(freeRooms);
 	}
 
 	console.log(this.schedule);
