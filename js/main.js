@@ -1,11 +1,22 @@
+const gistURL = 'https://gist.githubusercontent.com/Igormandello/a8d8d01fb9997c1120a18a2b1bdf20ad/raw/a188d235449850b6b6b78c8b2a2483ff38d8e422/Schedule%2520Raw';
+
+const labNames = [
+	'Dinalva',
+	'Claudio',
+	'LaPA'
+]
+
+var analyzer;
 function load(callback) {
 	let request = new XMLHttpRequest();
 	request.open('GET', gistURL);
 	request.send(null);
 
 	request.onreadystatechange = function() {
-		if (request.readyState == 4 && request.status == 200)
-			setup(request.responseText, callback);
+		if (request.readyState == 4 && request.status == 200) {
+      analyzer = new Analyzer(request.responseText, labNames);
+      callback();
+    }
 	}
 }
 
@@ -13,8 +24,8 @@ window.onload = () => {
   load(() => {
     let now = new Date(Date.now());
     
-    let data = setupData(now),
-        next = nextClasses(now);
+    let data = analyzer.setupData(now),
+        next = analyzer.nextClasses(now);
     console.log(data, next);
   
     setText(document.querySelector('div.last'), data.lastClasses);
@@ -29,7 +40,7 @@ window.onload = () => {
 
 function classesCycle() {
   let now = new Date(Date.now());
-  let classes = nextClasses(now);
+  let classes = analyzer.nextClasses(now);
   console.log(classes);
 
   document.querySelector('div.before-last').remove();
@@ -53,14 +64,11 @@ function classesCycle() {
 }
 
 function setText(div, classes) {
-  if (classes.classes === null) {
+  if (classes.classrooms === null) {
     div.children[0].innerText = 'NÃO';
     div.children[1].innerText = 'Olha a hora wtf';
   } else {
-    let available = [];
-    for (let i = 0; i < classes.classes.length; i++)
-      if (classes.classes[i] === '-' || classes.classes[i].includes('Aula Reforço') || classes.classes[i] === 'Interval')
-        available.push(labNames[i]);
+    let available = classes.classrooms;
     
     if (available.length == 0) {
       div.children[0].innerText = 'Não tem';
@@ -76,16 +84,18 @@ function setText(div, classes) {
 
 function checkNext(now) {
   let h = now.getHours(),
-      m = now.getMinutes();
+      m = now.getMinutes(),
+      s = now.getSeconds();
 
   let t = (closeTime.h - h) * 60 + closeTime.m - m;
   t *= 60;
   t *= 1000;
 
-  let classTime = classTimes[currentClass(now) + 1];
+  let classTime = classTimes[analyzer.currentClass(now) + 1];
   if (classTime) {
-    t = (classTime.h - h) * 60 + classTime.m - m;
+    t = (classTime.h - h) * 60 + classTime.m - m - 1;
     t *= 60;
+    t += 60 - s;
     t *= 1000;
 
     if (classTime.h < h)
