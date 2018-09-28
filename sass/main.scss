@@ -1,0 +1,192 @@
+$main-size: 8rem;
+$main-size-sm: 5rem;
+
+$secondary-size: 5rem;
+$secondary-size-sm: 3.5rem;
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+html {
+  font-family: 'Nunito', sans-serif;
+}
+
+section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: transparent;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left:-50%;
+    min-width: 200vh;
+    width: 200vw;
+    min-height: 200vw;
+    height: 200vh;
+    transform-origin: center center;
+    background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+    linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
+    linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
+
+    animation: change-colors 10s infinite linear;
+  }
+
+  div {
+    position: absolute;
+    color: white;
+    align-self: center;
+    text-align: center;
+    white-space: nowrap;
+    width: 90%;
+    transition: all 1s;
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+
+    span {
+      display: block;
+      transition: inherit;
+
+      &.time {
+        position: absolute;
+        left: 0;
+      }
+    }
+
+    &.last, &.next {
+      font-size: $secondary-size;
+      line-height: $secondary-size;
+      filter: brightness(0.8) blur(1px);
+
+      span {
+        font-size: $secondary-size / 4;
+        line-height: $secondary-size / 4;
+        height: $secondary-size / 4;
+
+        &.time {
+          top: calc(50% - #{$secondary-size / 8});
+        }
+      }
+
+      width: 80%;
+    }
+
+    &.last {
+      transform: translateY(4rem);
+    }
+
+    &.next {
+      transform: translateY(calc(100vh - #{$secondary-size * 1.25} - 4rem));
+    }
+
+    &.before-last, &.after-next {
+      font-size: 2.5rem;
+      line-height: 2.5rem;
+      width: 60%;
+      filter: brightness(0.8) blur(20px);
+
+      span {
+        font-size: 1rem;
+        line-height: 1rem;
+        height: 1rem;
+
+        &.time {
+          top: calc(50% - .5rem);
+        }
+      }
+    }
+
+    &.before-last {
+      transform: translateY(-5rem);
+    } 
+    
+    &.after-next {
+      transform: translateY(calc(100vh + 5rem));
+    }
+
+    &.current {
+      font-size: $main-size;
+      line-height: $main-size;
+      filter: none;
+      transform: translateY(calc(50vh - #{$main-size * 5 / 8}));
+
+      span {
+        font-size: $main-size / 4;
+        line-height: $main-size / 4;
+        height: $main-size / 4;
+
+        &.time {
+          top: calc(50% - #{$main-size / 8});
+        }
+      }
+    }
+  }
+}
+
+@keyframes change-colors {
+  from {
+    transform: rotateZ(0);
+  }
+
+  to {
+    transform: rotateZ(360deg);
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  section div {  
+    &.last, &.next {
+      font-size: $secondary-size-sm;
+      line-height: $secondary-size-sm;
+
+      span {
+        font-size: $secondary-size-sm / 4;
+        line-height: $secondary-size-sm / 4;
+        height: $secondary-size-sm / 4;
+
+        &.time {
+          top: calc(50% - #{$secondary-size-sm / 8});
+        }
+      }
+    }
+
+    &.next {
+      transform: translateY(calc(100vh - #{$secondary-size-sm * 1.25} - 4rem));
+    }
+
+    &.current {
+      font-size: $main-size-sm;
+      line-height: $main-size-sm;
+      transform: translateY(calc(50vh - #{$main-size-sm * 5 / 8}));
+
+      span {
+        font-size: $main-size-sm / 4;
+        line-height: $main-size-sm / 4;
+        height: $main-size-sm / 4;
+
+        &.time {
+          top: calc(50% - #{$main-size-sm / 8});
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 425px) {
+  html {
+    font-size: 8px;
+  }
+}
