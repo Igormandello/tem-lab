@@ -65,20 +65,16 @@ function Analyzer(data, classrooms) {
 				minutes = time.getMinutes();
 
 		if (closeTime.h < hours || (closeTime.h == hours && closeTime.m <= minutes)) {
-			let lastClasses = [ 
-				this.schedule[weekday].Dinalva[classTimes.length - 1],
-				this.schedule[weekday].Claudio[classTimes.length - 1],
-				this.schedule[weekday].LaPA[classTimes.length - 1]
-			];
+			let lastClasses = this.schedule[weekday][classTimes.length - 1];
 
 			return {
 				lastClasses: {
 					time: classTimes[classTimes.length - 1],
-					classes: lastClasses,
+					classrooms: lastClasses,
 				},
 				currentClasses: {
 					time: closeTime,
-					classes: null
+					classrooms: null
 				}
 			};
 		}
@@ -88,49 +84,33 @@ function Analyzer(data, classrooms) {
 		if (i < 0) {
 			let lastClasses;
 			if (weekday === weekdays[0])
-				lastClasses = [
-					this.schedule[weekdays[weekdays.length - 1]].Dinalva[classTimes.length - 1],
-					this.schedule[weekdays[weekdays.length - 1]].Claudio[classTimes.length - 1],
-					this.schedule[weekdays[weekdays.length - 1]].LaPA[classTimes.length - 1]
-				];
+				lastClasses = this.schedule[weekdays[weekdays.length - 1]][classTimes.length - 1];
 			else
-				lastClasses = [
-					this.schedule[weekdays[time.getDay() - 2]].Dinalva[classTimes.length - 1],
-					this.schedule[weekdays[time.getDay() - 2]].Claudio[classTimes.length - 1],
-					this.schedule[weekdays[time.getDay() - 2]].LaPA[classTimes.length - 1]
-				];
+				lastClasses = this.schedule[weekdays[time.getDay() - 2]][classTimes.length - 1];
 
 			return {
 				lastClasses: {
 					time: classTimes[classTimes.length - 1],
-					classes: lastClasses
+					classrooms: lastClasses
 				},
 				currentClasses: {
 					time: closeTime,
-					classes: null
+					classrooms: null
 				}
 			};
 		} else {
 			let lastClasses = null;
 			if (i - 1 >= 0)
-				lastClasses = [
-					this.schedule[weekday].Dinalva[i - 1],
-					this.schedule[weekday].Claudio[i - 1],
-					this.schedule[weekday].LaPA[i - 1]
-				];
+				lastClasses =	this.schedule[weekday][i - 1];
 
 			return {
 				lastClasses: {
 					time: (classTimes[i - 1] ? classTimes[i - 1] : closeTime),
-					classes: lastClasses,
+					classrooms: lastClasses,
 				},
 				currentClasses: {
 					time: classTimes[i],
-					classes: [
-						this.schedule[weekday].Dinalva[i],
-						this.schedule[weekday].Claudio[i],
-						this.schedule[weekday].LaPA[i]
-					]
+					classrooms: this.schedule[weekday][i]
 				}
 			};
 		}
@@ -144,21 +124,13 @@ function Analyzer(data, classrooms) {
 		if (closeTime.h < hours || (closeTime.h == hours && closeTime.m <= minutes)) {
 			let nextClasses;
 			if (weekday === weekdays[weekdays.length - 1])
-				nextClasses = [
-					this.schedule[weekdays[0]].Dinalva[0],
-					this.schedule[weekdays[0]].Claudio[0],
-					this.schedule[weekdays[0]].LaPA[0]
-				];
+				nextClasses = this.schedule[weekdays[0]][0];
 			else
-				nextClasses = [
-					this.schedule[weekdays[time.getDay()]].Dinalva[0],
-					this.schedule[weekdays[time.getDay()]].Claudio[0],
-					this.schedule[weekdays[time.getDay()]].LaPA[0]
-				];
+				nextClasses = this.schedule[weekdays[time.getDay()]][0];
 
 			return {
 				time: classTimes[0],
-				classes: nextClasses
+				classrooms: nextClasses
 			}
 		}
 
@@ -167,24 +139,16 @@ function Analyzer(data, classrooms) {
 		if (i < 0) {
 			return {
 				time: classTimes[0],
-				classes: [
-					this.schedule[weekday].Dinalva[0],
-					this.schedule[weekday].Claudio[0],
-					this.schedule[weekday].LaPA[0]
-				]
+				classrooms: this.schedule[weekday][0]
 			};
 		} else {
 			let nextClasses = null;
 			if (i + 1 < classTimes.length)
-				nextClasses = [
-					this.schedule[weekday].Dinalva[i + 1],
-					this.schedule[weekday].Claudio[i + 1],
-					this.schedule[weekday].LaPA[i + 1]
-				];
+				nextClasses = this.schedule[weekday][i + 1];
 
 			return {
 				time: classTimes[i + 1],
-				classes: nextClasses
+				classrooms: nextClasses
 			};
 		}
 	}
