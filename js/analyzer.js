@@ -60,7 +60,7 @@ function Analyzer(data, classrooms) {
 	},
 
 	this.setupData = function(time) {
-		let weekday = weekdays[time.getDay() - 1],
+		let weekday = weekdays[time.getDay() - 1] || 'monday',
 				hours = time.getHours(),
 				minutes = time.getMinutes();
 
@@ -117,7 +117,7 @@ function Analyzer(data, classrooms) {
 	},
 
 	this.nextClasses = function(time) {
-		let weekday = weekdays[time.getDay() - 1],
+		let weekday = weekdays[time.getDay() - 1] || 'monday',
 				hours = time.getHours(),
 				minutes = time.getMinutes();
 
